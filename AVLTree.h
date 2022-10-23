@@ -5,13 +5,18 @@
 #ifndef PA2_AVLTREE_H
 #define PA2_AVLTREE_H
 
+#include <iostream>
 #include "AVLNode.h"
+
+using std::cout;
+using std::endl;
 
 template <class T>
 class AVLTree {
 private:
     //pointer to root node
     AVLNode<T>* root;
+
 
     //helper to delete the entire tree
     void deleteTreeHelper(AVLNode<T>* rt);
@@ -33,6 +38,11 @@ private:
     void doubleWithLeftChild(AVLNode<T>*& k3);
     //does a double rotation to the right
     void doubleWithRightChild(AVLNode<T> *& k3);
+    //inserts a node helper
+    void insertHelper(const T& dat, AVLNode<T>*& rt);
+
+    //helper for inOrderprint
+    void inOrderPrintHelper(AVLNode<T>* rt);
 
 
 
@@ -47,6 +57,10 @@ public:
         deleteTreeHelper(root);
     }
 
+    //getter for the root
+    AVLNode<T>* getRoot() const{
+        return root;
+    }
     //returns the height of the tree
     int treeHeight(){
         int height = 0;
@@ -54,8 +68,13 @@ public:
         return height;
     }
 
-    //inserts a node
-    void insert(const T& dat, AVLNode<T>*& rt);
+    void insert(const T& dat){
+        insertHelper(dat, root);
+    }
+
+    void inOrderPrint(void){
+        inOrderPrintHelper(root);
+    }
 };
 
 template <class T>
@@ -121,7 +140,7 @@ void AVLTree<T>::doubleWithRightChild(AVLNode<T> *& k3){
 }
 
 template <class T>
-void AVLTree<T>::insert(const T& dat, AVLNode<T>*& rt){
+void AVLTree<T>::insertHelper(const T& dat, AVLNode<T>*& rt){
     //if we are past a leaf node, insert
     if(rt == nullptr){
         rt = new AVLNode<T>(dat, nullptr, nullptr);   //height defaults to 0
@@ -129,7 +148,7 @@ void AVLTree<T>::insert(const T& dat, AVLNode<T>*& rt){
     //if the data is < rt.data
     else if (dat < rt->data){
         //keep going down the tree and insert at the correct place
-        insert(dat, rt->leftPtr);
+        insertHelper(dat, rt->leftPtr);
         //check for height imballance
         if(height(rt->leftPtr) - height(rt->rightPtr) == 2){
             //case 1
@@ -143,7 +162,7 @@ void AVLTree<T>::insert(const T& dat, AVLNode<T>*& rt){
     //if rt.data < dat
     else if(rt->data<dat){
         //keep going down the tree and insert at the correct place
-        insert(dat, rt->rightPtr);
+        insertHelper(dat, rt->rightPtr);
         //check for height imballance
         if(height(rt->rightPtr) - height(rt->leftPtr) == 2){
             //case 4
@@ -155,6 +174,15 @@ void AVLTree<T>::insert(const T& dat, AVLNode<T>*& rt){
         }
     }
     rt->height = max(rt->leftPtr->height, rt->rightPtr->height)+1;
+}
+
+template <class T>
+void AVLTree<T>::inOrderPrintHelper(AVLNode<T>* rt){
+    if(rt == nullptr)
+        return;
+    inOrderPrintHelper(rt->leftPtr);
+    inOrderPrintHelper(rt->rightPtr);
+    cout << rt->data;
 }
 
 #endif //PA2_AVLTREE_H
