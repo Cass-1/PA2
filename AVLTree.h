@@ -63,8 +63,8 @@ void AVLTree<T>::deleteTreeHelper(AVLNode<T>* rt){
     if(rt == nullptr){
         return;
     }
-    deleteHelper(rt->getLeftPtr());
-    deleteHelper(rt->getLeftPtr());
+    deleteTreeHelper(rt->leftPtr);
+    deleteTreeHelper(rt->rightPtr);
     delete rt;
 }
 
