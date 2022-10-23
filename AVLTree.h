@@ -29,6 +29,10 @@ private:
     void rotateWithLeftChild(AVLNode<T>*& k2);
     //does a single rotation to the right
     void rotateWithRightChild(AVLNode<T>*& k1);
+    //does a double rotation to the left
+    void doubleWithLeftChild(AVLNode<T>*& k3);
+    //does a double rotation to the right
+    void doubleWithRightChild(AVLNode<T> *& k3);
 
 
 
@@ -102,6 +106,18 @@ void AVLTree<T>::rotateWithRightChild(AVLNode<T>*& k1){
 
     //updating pointer
     k1 = k2;
+}
+
+template <class T>
+void AVLTree<T>::doubleWithLeftChild(AVLNode<T>*& k3){
+    rotateWithRightChild(k3->leftPtr);
+    rotateWithLeftChild(k3);
+}
+
+template <class T>
+void AVLTree<T>::doubleWithRightChild(AVLNode<T> *& k3){
+    rotateWithLeftChild(k3->rightPtr);
+    rotateWithRightChild(k3);
 }
 
 template <class T>
