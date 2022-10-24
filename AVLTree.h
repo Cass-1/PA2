@@ -17,7 +17,6 @@ private:
     //pointer to root node
     AVLNode<T>* root;
 
-
     //helper to delete the entire tree
     void deleteTreeHelper(AVLNode<T>* rt);
     //helper to get the height of the tree
@@ -45,6 +44,8 @@ private:
     void doubleWithRightChild(AVLNode<T> *& k3);
     //inserts a node helper
     void insertHelper(const T& dat, AVLNode<T>*& rt);
+    //finds if the tree contains a value
+    void containsHelper(const T& data, AVLNode<T>* rt, int* contains);
 
     //helper for inOrderprint
     void inOrderPrintHelper(AVLNode<T>* rt);
@@ -52,6 +53,7 @@ private:
 
 
 public:
+
     //constructor
     AVLTree(){
         root = nullptr;
@@ -77,7 +79,13 @@ public:
         insertHelper(dat, root);
     }
 
-    void inOrderPrint(void){
+    bool contains(const T& dat){
+        int contains = 0;
+        containsHelper(dat, &contains);
+        return contains == 1;
+    }
+
+    void inOrderPrint(){
         inOrderPrintHelper(root);
     }
 };
@@ -179,6 +187,21 @@ void AVLTree<T>::insertHelper(const T& dat, AVLNode<T>*& rt){
         }
     }
     rt->height = max(height(rt->leftPtr), height(rt->rightPtr)) + 1;
+}
+
+//finds if the tree contains a value
+template <class T>
+void AVLTree<T>::containsHelper(const T& data, AVLNode<T>* rt, int* contains){
+    if(rt == nullptr)
+        return;
+    if(rt->data == data)
+        *contains = 1;
+    containsHelper(rt->leftPtr);
+    if(rt->data == data)
+        *contains = 1;
+    containsHelper(rt->rightPtr);
+    if(rt->data == data)
+        *contains = 1;
 }
 
 template <class T>
