@@ -12,6 +12,7 @@ int main(){
     cout << tree.treeHeight();
 
     cout << tree.contains(100) <<tree.contains(8);
+    cout << endl<< "Validate: " << tree.validate()<<endl;
 
 
     //comment for testing git

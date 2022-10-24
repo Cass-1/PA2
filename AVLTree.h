@@ -6,7 +6,7 @@
 #define PA2_AVLTREE_H
 
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 #include "AVLNode.h"
 
 using std::cout;
@@ -170,7 +170,10 @@ void AVLTree<T>::insertHelper(const T& dat, AVLNode<T>*& rt){
         //keep going down the tree and insert at the correct place
         insertHelper(dat, rt->leftPtr);
         //check for height imballance
-        if(height(rt->leftPtr) - height(rt->rightPtr) == 2){
+        int hL = height(rt->leftPtr);
+        int hR = height(rt->rightPtr);
+        if( hL - hR == 2){
+            //cout << endl<< "Validate from insterting left: " << this->validate()<<endl;
             //case 1
             if(dat < rt->leftPtr->data)
                 rotateWithLeftChild(rt);
@@ -184,7 +187,10 @@ void AVLTree<T>::insertHelper(const T& dat, AVLNode<T>*& rt){
         //keep going down the tree and insert at the correct place
         insertHelper(dat, rt->rightPtr);
         //check for height imballance
-        if(height(rt->rightPtr) - height(rt->leftPtr) == 2){
+        int hR = height(rt->rightPtr);
+        int hL = height(rt->leftPtr);
+        if( hR - hL == 2){
+            //cout << endl<< "Validate from insterting right: " << this->validate()<<endl;
             //case 4
             if(rt->rightPtr->data < dat)
                 rotateWithRightChild(rt);
@@ -214,9 +220,9 @@ template <class T>
 bool AVLTree<T>::validateHelper(AVLNode<T>* rt){
     if(rt == nullptr)
         return true;
-    int hLeft = height(root->leftPtr);
-    int hRight = height(root->rightPtr);
-    if(abs(hLeft - hRight) < 2 && validateHelper(rt->leftPtr)&& validateHelper(rt->rightPtr)){
+    int hLeft = height(rt->leftPtr);
+    int hRight = height(rt->rightPtr);
+    if(abs((hLeft - hRight)) != 2 && validateHelper(rt->leftPtr)&& validateHelper(rt->rightPtr)){
         return true;
     }
     return false;
