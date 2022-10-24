@@ -28,7 +28,12 @@ private:
     }
     //gets the max of two numbers
     int max(int a, int b){
-        return a > b? a:b;
+        if(a > b){
+            return a;
+        }
+        else{
+            return b;
+        }
     }
     //does a single rotation to the left
     void rotateWithLeftChild(AVLNode<T>*& k2);
@@ -173,7 +178,7 @@ void AVLTree<T>::insertHelper(const T& dat, AVLNode<T>*& rt){
                 doubleWithRightChild(rt);
         }
     }
-    rt->height = max(rt->leftPtr->height, rt->rightPtr->height)+1;
+    rt->height = max(height(rt->leftPtr), height(rt->rightPtr)) + 1;
 }
 
 template <class T>
@@ -181,8 +186,9 @@ void AVLTree<T>::inOrderPrintHelper(AVLNode<T>* rt){
     if(rt == nullptr)
         return;
     inOrderPrintHelper(rt->leftPtr);
-    inOrderPrintHelper(rt->rightPtr);
     cout << rt->data;
+    inOrderPrintHelper(rt->rightPtr);
+
 }
 
 #endif //PA2_AVLTREE_H

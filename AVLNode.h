@@ -18,7 +18,7 @@ protected:
 
 public:
     //constructor
-    AVLNode(const T& data, AVLNode<T>* lPtr = nullptr, AVLNode<T>* rPtr= nullptr, int h = 0);
+    explicit AVLNode(const T& data, AVLNode<T>* lPtr = nullptr, AVLNode<T>* rPtr= nullptr, int h = 0);
 
     //destructor
     ~AVLNode();
