@@ -6,6 +6,7 @@
 #define PA2_AVLTREE_H
 
 #include <iostream>
+#include <stdlib.h>
 #include "AVLNode.h"
 
 using std::cout;
@@ -45,7 +46,9 @@ private:
     //inserts a node helper
     void insertHelper(const T& dat, AVLNode<T>*& rt);
     //finds if the tree contains a value
-    void containsHelper(const T& data, AVLNode<T>* rt, int* contains);
+    void containsHelper(const T& data, AVLNode<T>* rt, bool& flag);
+    //finds if the tree is ballanced
+    bool validateHelper(AVLNode<T>* rt);
 
     //helper for inOrderprint
     void inOrderPrintHelper(AVLNode<T>* rt);
@@ -80,9 +83,13 @@ public:
     }
 
     bool contains(const T& dat){
-        int contains = 0;
-        containsHelper(dat, &contains);
-        return contains == 1;
+        bool flag = false;
+        containsHelper(dat, root, flag);
+        return flag;
+    }
+
+    bool validate(){
+        return validateHelper(root);
     }
 
     void inOrderPrint(){
@@ -191,17 +198,28 @@ void AVLTree<T>::insertHelper(const T& dat, AVLNode<T>*& rt){
 
 //finds if the tree contains a value
 template <class T>
-void AVLTree<T>::containsHelper(const T& data, AVLNode<T>* rt, int* contains){
+void AVLTree<T>::containsHelper(const T& data, AVLNode<T>* rt, bool& flag){
     if(rt == nullptr)
         return;
     if(rt->data == data)
-        *contains = 1;
-    containsHelper(rt->leftPtr);
-    if(rt->data == data)
-        *contains = 1;
-    containsHelper(rt->rightPtr);
-    if(rt->data == data)
-        *contains = 1;
+        flag = true;
+
+    containsHelper(data, rt->leftPtr, flag);
+
+    containsHelper(data, rt->rightPtr, flag);
+
+}
+
+template <class T>
+bool AVLTree<T>::validateHelper(AVLNode<T>* rt){
+    if(rt == nullptr)
+        return true;
+    int hLeft = height(root->leftPtr);
+    int hRight = height(root->rightPtr);
+    if(abs(hLeft - hRight) < 2 && validateHelper(rt->leftPtr)&& validateHelper(rt->rightPtr)){
+        return true;
+    }
+    return false;
 }
 
 template <class T>
